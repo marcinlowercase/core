@@ -1,31 +1,29 @@
 :root {
     /* =========================================
-       1. BASE DEVICE VARIABLES
-       These are the fallbacks. Your Android browser
-       will override these globally when opened.
+       1. BASE CONSTANTS
+       These belong in :root because they are global
+       hardware values injected by your browser.
        ========================================= */
     --device-corner-radius: 20px;
     --padding: 8px;
     --single-line-height: 100px;
-    --max-list-height: 5; /* Provide a default fallback */
-    --animation-speed: 300; /* Raw number representing milliseconds */
+    --max-list-height: 5;
+    --animation-speed: 300;
 
     --highlight-color: blue;
-    /* Since CSS can't detect dark/light from a hex natively,
-       your Android browser should inject this contrast color alongside highlight-color */
     --highlight-contrast-color: white;
 
-    /* =========================================
-       2. THE LAYER ENGINE
-       By default, the global layer is 0.
-       ========================================= */
+    /* Default global layer */
     --layer: 0;
+}
 
-    /* =========================================
-       3. KOTLIN TO CSS TRANSLATIONS
-       These automatically recalculate if --layer changes.
-       ========================================= */
-
+/* =========================================
+   2. THE REACTIVE MATH ENGINE
+   Using '*' forces the browser to recalculate
+   these formulas individually for every element
+   based on whatever its local --layer value is!
+   ========================================= */
+* {
     /* cornerRadiusForLayer: max(0, deviceCornerRadius - (padding * layer)) */
     --layer-corner-radius: max(
         0px,
@@ -50,7 +48,6 @@
     );
 
     /* animationSpeedForLayer: max(0, animationSpeed - (50 * layer)) */
-    /* We multiply by 1ms to convert the raw number into a valid CSS time unit */
     --layer-animation-speed: max(
         0ms,
         calc((var(--animation-speed) - 50 * var(--layer)) * 1ms)
