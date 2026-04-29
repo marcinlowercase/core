@@ -4,7 +4,7 @@
        These belong in :root because they are global
        hardware values injected by your browser.
        ========================================= */
-    --device-corner-radius: 32px;
+    --device-corner-radius: 30px;
     --padding: 8px;
     --single-line-height: 100px;
     --max-list-height: 5;
