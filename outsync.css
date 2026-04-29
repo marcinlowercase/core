@@ -11,7 +11,8 @@
     --animation-speed: 300;
 
     --highlight-color: blue;
-    --highlight-contrast-color: white;
+    --on-highlight: white;
+    --off-highlight: black;
 
     /* Default global layer */
     --layer: 0;
