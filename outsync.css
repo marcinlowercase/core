@@ -1,14 +1,13 @@
 :root {
     /* =========================================
-       1. BASE CONSTANTS
-       These belong in :root because they are global
-       hardware values injected by your browser.
+       1. BASE CONSTANTS (outsync Design Tokens)
        ========================================= */
     --device-corner-radius: 28px;
+    --base-radius: 28px;
     --padding: 8px;
     --single-line-height: 100px;
-    --max-list-height: 5;
-    --animation-speed: 300;
+    --max-list-height: 2;
+    --animation-speed: 300ms;
 
     --highlight-color: blue;
     --on-highlight: white;
@@ -19,16 +18,19 @@
 }
 
 /* =========================================
-   2. THE REACTIVE MATH ENGINE
-   Using '*' forces the browser to recalculate
-   these formulas individually for every element
-   based on whatever its local --layer value is!
+   2. REACTIVE LAYER MATH ENGINE
+   Calculated per element based on its --layer
    ========================================= */
 * {
-    /* cornerRadiusForLayer: max(0, deviceCornerRadius - (padding * layer)) */
+    /* cornerRadiusForLayer:
+       Layer 0 = deviceCornerRadius.
+       Layer >= 1 = max(deviceCornerRadius, baseRadius) - (padding * layer). */
     --layer-corner-radius: max(
         0px,
-        calc(var(--device-corner-radius) - (var(--padding) * var(--layer)))
+        calc(
+            max(var(--device-corner-radius), calc(var(--base-radius) * min(1, var(--layer))))
+            - (var(--padding) * var(--layer))
+        )
     );
 
     /* minHeightForLayer: singleLineHeight - (padding * layer * 2) */
@@ -36,7 +38,7 @@
         var(--single-line-height) - (var(--padding) * var(--layer) * 2)
     );
 
-    /* heightForLayer: max((cornerRadius * 2), minHeight) */
+    /* heightForLayer: max(cornerRadius * 2, minHeight) */
     --layer-height: max(
         calc(var(--layer-corner-radius) * 2),
         var(--layer-min-height)
@@ -48,9 +50,9 @@
             (var(--padding) * (var(--max-list-height) + 1))
     );
 
-    /* animationSpeedForLayer: max(0, animationSpeed - (50 * layer)) */
+    /* animationSpeedForLayer: max(0ms, animationSpeed - (50ms * layer)) */
     --layer-animation-speed: max(
         0ms,
-        calc((var(--animation-speed) - 50 * var(--layer)) * 1ms)
+        calc(var(--animation-speed) - (50ms * var(--layer)))
     );
 }
